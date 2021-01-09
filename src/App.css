@@ -1,0 +1,48 @@
+.App {
+    background-color: white;
+    padding: 0;
+    margin: 0;
+}
+
+.header__logo {
+    height: 300px;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+}
+
+.content {
+    margin-top: 40px;
+    display: flex;
+    width: auto;
+    height: auto;
+    justify-content: center;
+}
+
+.description {
+    margin-left: -250px;
+}
+
+.authors {
+}
+
+.app {
+    margin-left: 100px;
+}
+
+.app__title {
+    margin-bottom: 10px;
+}
+
+p {
+    font-family: "Corbel Light";
+    font-size: 24px;
+}
+
+.app__title {
+    font-family: Corbel;
+    font-size: 32px;
+    font-weight: normal;
+}
