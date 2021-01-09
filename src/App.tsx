@@ -1,10 +1,27 @@
-import {useCallback, useState} from "react";
+import { useCallback, useState } from "react";
 import './App.css';
 import imageSrc from './face-rec.png';
+
+const base64ToBlob = (base64: string) => {
+    const byteCharacters = atob(base64);
+    const byteArrays = [];
+    for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+        const slice = byteCharacters.slice(offset, offset + 512);
+        const byteNumbers = new Array(slice.length);
+        for (let i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        byteArrays.push(byteArray);
+    }
+    const blob = new Blob(byteArrays, { type: '' });
+    return blob;
+}
 
 function App() {
     const [file, setFile] = useState<Blob | undefined>(undefined);
     const [result, setResult] = useState<Blob | undefined>(undefined);
+    const [faceCount, setFaceCount] = useState<number | undefined>(undefined);
     const handleChange = useCallback((event) => {
         setFile(event.target.files[0]);
     }, [setFile]);
@@ -18,8 +35,11 @@ function App() {
                     method: 'POST',
                     body: formData
                 })
-                    .then((response) => response.blob())
-                    .then((blob) => setResult(blob))
+                    .then((response) => response.json())
+                    .then((json) => {
+                        setFaceCount(json.faceCount);
+                        setResult(base64ToBlob(json.image));
+                    })
                     .catch((e) => alert(e));
             }
         },
@@ -28,30 +48,33 @@ function App() {
     return (
         <div className="App">
             <div className={'header'}>
-                <img src={imageSrc} alt={'logo'} className={'header__logo'}/>
+                <img src={imageSrc} alt={'logo'} className={'header__logo'} />
             </div>
-
             <div className={'content'}>
                 <div className={'description'}>
                     <p className={'description__text'}>
                         Привет!
-                        <br/>
+                        <br />
                         Данный сайт позволяет проанализировать изображение, находя на нём лица людей.
-                        <p className={'authors'}>
+                        <br />
+                        <span className={'authors'}>
                             Проект разработан в рамках курсовой работы студентов ПИН-171
-                            <br/> Газиза Саттарова и Сергея Вольтера
-                        </p>
+                            <br />
+                            Газиза Саттарова и Сергея Вольтера.
+                        </span>
                     </p>
                 </div>
-
                 <div className={'app'}>
                     <h3 className={'app__title'}> Чтобы приступить, загрузите файл: </h3>
                     <form onSubmit={handleSubmit}>
-                        <input type="file" className={'button__file'} onChange={handleChange}/>
-                        <input type="submit" className={'button__submit'} disabled={file === undefined}/>
+                        <input type="file" className={'button__file'} onChange={handleChange} />
+                        <input type="submit" className={'button__submit'} disabled={file === undefined} />
                     </form>
+                    {faceCount && (
+                        <p>Количество найденных лиц: {faceCount}</p>
+                    )}
                     {result && (
-                        <img src={URL.createObjectURL(result)} alt="result"/>
+                        <img className={'app__result'} src={URL.createObjectURL(result)} alt="result" />
                     )}
                 </div>
             </div>

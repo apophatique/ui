@@ -18,31 +18,31 @@
     display: flex;
     width: auto;
     height: auto;
-    justify-content: center;
+    justify-content: space-around;
 }
 
-.description {
-    margin-left: -250px;
-}
-
-.authors {
-}
-
+.description,
 .app {
-    margin-left: 100px;
+    display: inline-block;
+    width: 45%;
 }
 
 .app__title {
     margin-bottom: 10px;
 }
 
+.app__result {
+    margin-top: 20px;
+    width: 100%;
+}
+
 p {
-    font-family: "Corbel Light";
+    font-family: "Corbel Light, sans-serif";
     font-size: 24px;
 }
 
 .app__title {
-    font-family: Corbel;
+    font-family: "Corbel, sans-serif";
     font-size: 32px;
     font-weight: normal;
 }
