@@ -14,8 +14,7 @@ const base64ToBlob = (base64: string) => {
         const byteArray = new Uint8Array(byteNumbers);
         byteArrays.push(byteArray);
     }
-    const blob = new Blob(byteArrays, { type: '' });
-    return blob;
+    return new Blob(byteArrays, { type: '' });
 }
 
 function App() {
@@ -31,7 +30,7 @@ function App() {
             if (file !== undefined) {
                 const formData = new FormData();
                 formData.set("file", file);
-                fetch('http://localhost:8080', {
+                fetch('/api/', {
                     method: 'POST',
                     body: formData
                 })
@@ -58,9 +57,7 @@ function App() {
                         Данный сайт позволяет проанализировать изображение, находя на нём лица людей.
                         <br />
                         <span className={'authors'}>
-                            Проект разработан в рамках курсовой работы студентов ПИН-171
-                            <br />
-                            Газиза Саттарова и Сергея Вольтера.
+                            Проект разработан в рамках курсовой работы студента ПИН-171 Газиза Саттарова.
                         </span>
                     </p>
                 </div>
