@@ -1,11 +1,7 @@
 .App {
-    background-color: white;
-    padding: 0;
-    margin: 0;
-}
-
-.header__logo {
-    height: 300px;
+    background-color: #fdffeb;
+    width: 100%;
+    height: 100%;
 }
 
 .header {
@@ -21,28 +17,16 @@
     justify-content: space-around;
 }
 
-.description,
-.app {
+.left-side,
+.right-side {
     display: inline-block;
     width: 45%;
 }
 
-.app__title {
-    margin-bottom: 10px;
-}
-
-.app__result {
-    margin-top: 20px;
+.right-side__result {
     width: 100%;
 }
 
 p {
-    font-family: "Corbel Light, sans-serif";
     font-size: 24px;
-}
-
-.app__title {
-    font-family: "Corbel, sans-serif";
-    font-size: 32px;
-    font-weight: normal;
 }

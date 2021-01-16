@@ -1,6 +1,5 @@
 import { useCallback, useState } from "react";
 import './App.css';
-import imageSrc from './face-rec.png';
 
 const base64ToBlob = (base64: string) => {
     const byteCharacters = atob(base64);
@@ -18,60 +17,60 @@ const base64ToBlob = (base64: string) => {
 }
 
 function App() {
-    const [file, setFile] = useState<Blob | undefined>(undefined);
+    const [source, setSource] = useState<Blob | undefined>(undefined);
     const [result, setResult] = useState<Blob | undefined>(undefined);
-    const [faceCount, setFaceCount] = useState<number | undefined>(undefined);
-    const handleChange = useCallback((event) => {
-        setFile(event.target.files[0]);
-    }, [setFile]);
-    const handleSubmit = useCallback(
+    const [carCount, setCarCount] = useState<number | undefined>(undefined);
+    const handleSelectFile = useCallback((event) => {
+        setSource(event.target.files[0]);
+    }, [setSource]);
+    const handleSubmitForm = useCallback(
         (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
-            if (file !== undefined) {
+            if (source !== undefined) {
                 const formData = new FormData();
-                formData.set("file", file);
-                fetch('/api/', {
+                formData.set("file", source);
+                fetch('http://localhost:8080', {
                     method: 'POST',
                     body: formData
                 })
                     .then((response) => response.json())
                     .then((json) => {
-                        setFaceCount(json.faceCount);
+                        setCarCount(json.carCount);
                         setResult(base64ToBlob(json.image));
                     })
                     .catch((e) => alert(e));
             }
         },
-        [file, setResult]
+        [source, setResult]
     );
     return (
         <div className="App">
             <div className={'header'}>
-                <img src={imageSrc} alt={'logo'} className={'header__logo'} />
+                <h1>&#127950; Подсчет количества машин на фотографии &#127950;</h1>
             </div>
             <div className={'content'}>
-                <div className={'description'}>
-                    <p className={'description__text'}>
-                        Привет!
-                        <br />
-                        Данный сайт позволяет проанализировать изображение, находя на нём лица людей.
-                        <br />
-                        <span className={'authors'}>
-                            Проект разработан в рамках курсовой работы студента ПИН-171 Газиза Саттарова.
-                        </span>
+                <div className={'left-side'}>
+                    <p className={'left-side__text'}>
+                        Разработчик: Исаков Александр<br />
+                        Группа: ПИН-171<br />
+                        Кафедра: <a href="https://omgtu.ru/general_information/faculties/faculty_of_information_technology_and_computer_systems/department_of_automated_systems_of_information_processing_and_management/">АСОИУ</a>
                     </p>
-                </div>
-                <div className={'app'}>
-                    <h3 className={'app__title'}> Чтобы приступить, загрузите файл: </h3>
-                    <form onSubmit={handleSubmit}>
-                        <input type="file" className={'button__file'} onChange={handleChange} />
-                        <input type="submit" className={'button__submit'} disabled={file === undefined} />
+                    <p className={'left-side__text'}>
+                        1) Выберите файл с изображением нажатием кнопки "Choose File"<br />
+                        2) Подтвердите выбор нажатием кнопки "Submit"<br />
+                        3) В случае успеха результат появится в правой части страницы, в случае неудачи будет выведена ошибка
+                    </p>
+                    <form onSubmit={handleSubmitForm}>
+                        <input type="file" className={'left-side__file-select-block'} onChange={handleSelectFile} />
+                        <input type="submit" className={'left-side__submit-button'} disabled={source === undefined} />
                     </form>
-                    {faceCount && (
-                        <p>Количество найденных лиц: {faceCount}</p>
+                </div>
+                <div className={'right-side'}>
+                    {carCount && (
+                        <p>Количество найденных машин: {carCount}</p>
                     )}
                     {result && (
-                        <img className={'app__result'} src={URL.createObjectURL(result)} alt="result" />
+                        <img className={'right-side__result'} src={URL.createObjectURL(result)} alt="result" />
                     )}
                 </div>
             </div>
